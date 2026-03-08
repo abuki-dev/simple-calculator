@@ -1,0 +1,119 @@
+/* Calculator container */
+.calculator{
+    background: linear-gradient(180deg,#071018 0%, #021018 100%);
+    width: 360px;
+    max-width: 95%;
+    margin: 6vh auto;
+    padding: 18px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(2,8,12,0.6);
+    color: #eef6fb;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Heading */
+#cal{
+    font-size: 1.25rem;
+    margin: 6px 0 10px;
+    color: #0d90e0;
+}
+
+/* Display */
+input#display{
+    width: 100%;
+    height: 44px;
+    margin: 8px 0 14px;
+    padding: 6px 10px;
+    font-size: 1.1rem;
+    text-align: right;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.03);
+    color: #f7fbff;
+}
+
+hr{
+    width: 90%;
+    margin: 8px auto;
+    border: none;
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+}
+
+/* Top small navigator icons */
+.navigator{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.navigator p{
+    margin: 0;
+    padding: 6px 8px;
+    width: 36px;
+    height: 36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    color: #dceff6;
+    font-weight: 600;
+}
+
+/* Buttons grid */
+.nos{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 10px 0 6px;
+}
+
+.nos p{
+    margin: 0;
+    padding: 12px 0;
+    text-align: center;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.03);
+    color: #eef6fb;
+    user-select: none;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);
+}
+
+/* Operators styling */
+.nos p:nth-child(4), .nos p:nth-child(8), .nos p:nth-child(12), .nos p:nth-child(16), #equal{
+    background: linear-gradient(180deg,#ffb84d,#ff9800);
+    color: #061217;
+}
+
+/* Equal button spans one cell visually */
+#equal{
+    grid-column: 4 / 5;
+}
+
+.nos p:active, .navigator p:active{
+    transform: translateY(1px);
+    opacity: 0.95;
+}
+
+main{
+    margin: 6px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 420px){
+    .calculator{ padding: 12px; }
+    .nos p{ padding: 10px 0; font-size: 0.95rem }
+    input#display{ height: 40px; font-size: 1rem }
+}
+.nos p:hover, .navigator p:hover{
+    background: rgba(255,255,255,0.05);
+     transform:translateY(-6PX);
+
+}   
+
