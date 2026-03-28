@@ -7,7 +7,7 @@ buttons.forEach(button => {
 
         if (value === '=') {
             try {
-                // Replace 'x' with '*' so math works
+               
                 let expression = display.value.replace(/x/g, '*');
                 expression = expression.replace(/(\d+)%/g, '($1/100)');
                 display.value = eval(expression);
