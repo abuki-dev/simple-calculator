@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style/output.css" />
+  <title>Calculator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #060d18;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(14, 80, 160, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(120, 40, 200, 0.12) 0%, transparent 55%);
+    }
+
+    /* ── Card ── */
+    .calculator {
+      width: 100%;
+      max-width: 380px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 28px;
+      padding: 28px 24px 24px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 32px 64px rgba(0,0,0,0.6),
+        0 8px 24px rgba(0,0,0,0.4);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      color: #e8f4ff;
+      user-select: none;
+    }
+
+    /* ── Title ── */
+    #cal {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(120, 180, 255, 0.6);
+      margin-bottom: 20px;
+    }
+
+    /* ── Display ── */
+    #display {
+      width: 100%;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 2rem;
+      font-weight: 300;
+      text-align: right;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+      outline: none;
+      caret-color: transparent;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+      transition: border-color 0.2s;
+      margin-bottom: 20px;
+      /* prevent zoom on iOS */
+      font-size: clamp(1.4rem, 6vw, 2rem);
+    }
+    #display:focus { border-color: rgba(80, 160, 255, 0.3); }
+
+    /* ── Divider ── */
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      margin: 4px 0 16px;
+    }
+
+    /* ── Navigator row ── */
+    .navigator {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .navigator p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: rgba(160, 210, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .navigator p:hover {
+      background: rgba(80, 160, 255, 0.12);
+      border-color: rgba(80, 160, 255, 0.25);
+      color: #a8d4ff;
+      transform: translateY(-2px);
+    }
+    .navigator p:active { transform: translateY(0); opacity: 0.8; }
+
+    /* ── Button grid ── */
+    .nos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .nos p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      position: relative;
+      overflow: hidden;
+
+      /* number buttons */
+      background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #ddeeff;
+      box-shadow:
+        0 4px 12px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .nos p::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .nos p:hover {
+      background: linear-gradient(145deg, rgba(255,255,255,0.11), rgba(255,255,255,0.05));
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .nos p:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+
+    /* ── Operator buttons (col 4 + equal) ── */
+    .nos p:nth-child(4),
+    .nos p:nth-child(8),
+    .nos p:nth-child(12),
+    .nos p:nth-child(16),
+    #equal {
+      background: linear-gradient(145deg, #f5a623, #e8820c);
+      border-color: rgba(255,180,60,0.3);
+      color: #1a0a00;
+      font-weight: 700;
+      box-shadow:
+        0 4px 16px rgba(232, 130, 12, 0.35),
+        inset 0 1px 0 rgba(255,220,120,0.3);
+    }
+    .nos p:nth-child(4):hover,
+    .nos p:nth-child(8):hover,
+    .nos p:nth-child(12):hover,
+    .nos p:nth-child(16):hover,
+    #equal:hover {
+      background: linear-gradient(145deg, #ffb83a, #f09010);
+      box-shadow: 0 8px 24px rgba(232, 130, 12, 0.5), inset 0 1px 0 rgba(255,220,120,0.4);
+      transform: translateY(-3px);
+    }
+
+    /* ── Special top-row buttons (c, %, ()) ── */
+    .nos p:nth-child(1),
+    .nos p:nth-child(2),
+    .nos p:nth-child(3) {
+      background: linear-gradient(145deg, rgba(80,160,255,0.15), rgba(80,160,255,0.06));
+      border-color: rgba(80,160,255,0.18);
+      color: #90c8ff;
+    }
+    .nos p:nth-child(1):hover,
+    .nos p:nth-child(2):hover,
+    .nos p:nth-child(3):hover {
+      background: linear-gradient(145deg, rgba(80,160,255,0.22), rgba(80,160,255,0.1));
+      box-shadow: 0 8px 20px rgba(80,160,255,0.2);
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 400px) {
+      .calculator { padding: 22px 16px 18px; border-radius: 22px; }
+      .nos { gap: 8px; }
+      .navigator { gap: 8px; }
+      .nos p { font-size: 0.9rem; }
+    }
+
+    @media (max-width: 320px) {
+      .nos p { font-size: 0.8rem; }
+      .navigator p { height: 36px; font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <h1 id="cal">Calculator</h1>
+
+    <main>
+      <input type="text" id="display" readonly />
+
+      <div class="navigator">
+        <p id="history">H</p>
+        <p id="scale">S</p>
+        <p id="pi">P</p>
+        <p id="erase">E</p>
+      </div>
+
+      <hr />
+
+      <div class="nos">
+        <p>c</p>
+        <p id="cancel">()</p>
+        <p>%</p>
+        <p>/</p>
+
+        <p>7</p>
+        <p>8</p>
+        <p>9</p>
+        <p>*</p>
+
+        <p>4</p>
+        <p>5</p>
+        <p>6</p>
+        <p>-</p>
+
+        <p>1</p>
+        <p>2</p>
+        <p>3</p>
+        <p>+</p>
+
+        <p>+/-</p>
+        <p>0</p>
+        <p>.</p>
+        <p id="equal">=</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="scrip.js"></script>
+</body>
+</html>
